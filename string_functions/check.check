@@ -1,0 +1,2001 @@
+#include "s21_string.h"
+
+int size = sizeof(S21_NULL);
+
+#test test_s21_strlen
+char str11[100] = "Hello world!";
+char str22[100] = "Hello world! Hello world!";
+ck_assert_int_eq(s21_strlen(str11), strlen(str11));
+ck_assert_int_ne(s21_strlen(str11), strlen(str22));
+
+char str1[] = "qwerty";
+char str2[] = "";
+char str3[] = "STOP! PLS!";
+char str4[] = "Hello my dear peer!\n\n\n\n\n\n";
+char str5[] = "123456789";
+char str6[] = "\n";
+char str7[] = "\0";
+
+ck_assert_uint_eq(s21_strlen("qwe_123_rty"), strlen("qwe_123_rty"));
+ck_assert_uint_eq(s21_strlen("\n"), strlen("\n"));
+ck_assert_uint_eq(s21_strlen("\0"), strlen("\0"));
+ck_assert_uint_eq(s21_strlen("        "), strlen("        "));
+ck_assert_uint_eq(s21_strlen("GSPD, DEAD BLONDE"), strlen("GSPD, DEAD BLONDE"));
+ck_assert_uint_eq(s21_strlen("åƒ≤©´øœµç˙å¥œ´π®≤ç"),
+                  strlen("åƒ≤©´øœµç˙å¥œ´π®≤ç"));
+ck_assert_ptr_null((void *)s21_strlen(S21_NULL));
+ck_assert_int_eq(s21_strlen(str1), strlen(str1));
+ck_assert_int_eq(s21_strlen(str2), strlen(str2));
+ck_assert_int_eq(s21_strlen(str3), strlen(str3));
+ck_assert_int_eq(s21_strlen(str4), strlen(str4));
+ck_assert_int_eq(s21_strlen(str5), strlen(str5));
+ck_assert_int_eq(s21_strlen(str6), strlen(str6));
+ck_assert_int_eq(s21_strlen(str7), strlen(str7));
+
+#test test_s21_memchr
+char str[100] = "Hello world!";
+char c = 'H';
+s21_size_t n = 10;
+ck_assert_str_eq(s21_memchr(str, c, n), memchr(str, c, n));
+
+char mass1[100] = "1234567890";
+char mass2[100] = "Have_a_nice_day!";
+char mass3[100] = "1010011010";
+char mass4[100] = "GJMyFriend";
+char mass5[100] = "qwerty";
+char mass6[] = "";
+char *mass7 =
+    "Searches for the first pass of the character c (an unsigned type) in "
+    "the first n bytes of the string that the str argument was approaching.";
+char *mass8 = "fun_s21_memchr";
+fail_unless(s21_memchr(mass1, '4', 9) == memchr(mass1, '4', 9));
+fail_unless(s21_memchr(mass2, 'a', 9) == memchr(mass2, 'a', 9));
+fail_unless(s21_memchr(mass3, '0', 9) == memchr(mass3, '0', 9));
+fail_unless(s21_memchr(mass4, 'Y', 9) == memchr(mass4, 'Y', 9));
+fail_unless(s21_memchr(mass5, 'y', 9) == memchr(mass5, 'y', 9));
+ck_assert_ptr_eq(s21_memchr(mass6, ' ', 1), memchr(mass6, ' ', 1));
+ck_assert_ptr_eq(s21_memchr(mass7, 'f', 20), memchr(mass7, 'f', 20));
+ck_assert_ptr_eq(s21_memchr(mass8, 'f', 20), memchr(mass8, 'f', 20));
+ck_assert_ptr_eq(s21_memchr(mass7, '.', 2), memchr(mass7, '.', 2));
+ck_assert_ptr_eq(s21_memchr(mass7, '.', 40), memchr(mass7, '.', 40));
+ck_assert_ptr_eq(s21_memchr("wasd", 'a', 0), memchr("wasd", 'a', 0));
+ck_assert_ptr_eq(s21_memchr("wasd", 'a', 1), memchr("wasd", 'a', 1));
+ck_assert_ptr_eq(s21_memchr("wasd", 'a', 2), memchr("wasd", 'a', 2));
+ck_assert_ptr_eq(s21_memchr("wasd", '\0', 5), memchr("wasd", '\0', 5));
+
+#test test_s21_memcpy
+char str1[100] = "qwerty";
+char str2[100] = "wasd";
+char str3[100] = "123456";
+char str4[100] = "ƒ∑ƒ®ƒ©®å´∂∑å∂";
+char str5[100] = "\n";
+char mass1[100] = "";
+
+int len = s21_strlen(str1);
+
+ck_assert_str_eq(s21_memcpy(mass1, str1, len), memcpy(mass1, str1, len));
+ck_assert_str_eq(s21_memcpy(mass1, str2, len), memcpy(mass1, str2, len));
+ck_assert_str_eq(s21_memcpy(mass1, str3, len), memcpy(mass1, str3, len));
+ck_assert_str_eq(s21_memcpy(mass1, str4, len), memcpy(mass1, str4, len));
+ck_assert_str_eq(s21_memcpy(mass1, str5, len), memcpy(mass1, str5, len));
+ck_assert_str_eq(s21_memcpy(str1, mass1, len), memcpy(str1, mass1, len));
+ck_assert_str_eq(s21_memcpy(str1, str2, len), memcpy(str1, str2, len));
+ck_assert_str_eq(s21_memcpy(str1, str3, len), memcpy(str1, str3, len));
+ck_assert_str_eq(s21_memcpy(str1, str4, len), memcpy(str1, str4, len));
+ck_assert_str_eq(s21_memcpy(str4, str5, len), memcpy(str4, str5, len));
+
+#test test_s21_memcpy_1
+char str1[100] = "qwerty";
+char str2[100] = "wasd";
+s21_size_t len2 = s21_strlen(str2);
+ck_assert_str_eq(s21_memcpy(str1, str2, len2), memcpy(str1, str2, len2));
+
+#test test_s21_memcpy_2
+char str3[100] = "123456";
+char str4[100] = "ƒ∑ƒ®ƒ©®å´∂∑å∂";
+s21_size_t len4 = s21_strlen(str4);
+ck_assert_str_eq(s21_memcpy(str3, str4, len4), memcpy(str3, str4, len4));
+
+#test test_s21_memcpy_3
+char str5[100] = "\n";
+char mass1[100] = "";
+s21_size_t len5 = s21_strlen(str5);
+ck_assert_str_eq(s21_memcpy(mass1, str5, len5), memcpy(mass1, str5, len5));
+
+#test test_s21_memcmp
+#if defined(__APPLE__)
+
+char str11[100] = "Hello world!";
+char str22[100] = "Hello world!";
+char str33[100] = "Goodbye world!";
+int n = 7;
+ck_assert_int_eq(s21_memcmp(str11, str22, n), memcmp(str11, str22, n));
+ck_assert_int_eq(s21_memcmp(str11, str33, n), memcmp(str11, str33, n));
+
+char str1[] = "qwerty";
+char str2[] = "qwerty";
+char str3[] = "qwertyu";
+char str4[] = "qwert";
+char str5[] = "";
+char str6[] = "\n";
+ck_assert_int_eq(s21_memcmp(str1, str2, 6), memcmp(str1, str2, 6));
+ck_assert_int_eq(s21_memcmp(str1, str3, 9), memcmp(str1, str3, 9));
+ck_assert_int_eq(s21_memcmp(str1, str3, 5), memcmp(str1, str3, 5));
+ck_assert_int_eq(s21_memcmp(str1, str4, 1), memcmp(str1, str4, 1));
+ck_assert_int_eq(s21_memcmp(str1, str5, 1), memcmp(str1, str5, 1));
+ck_assert_int_eq(s21_memcmp(str5, str6, 1), memcmp(str5, str6, 1));
+
+#elif defined(__linux__)
+char str11[100] = "Hello world!";
+char str22[100] = "Hello world!";
+char str33[100] = "Goodbye world!";
+int n = 7;
+char str1[] = "qwerty";
+char str2[] = "qwerty";
+char str3[] = "qwertyu";
+char str4[] = "qwert";
+char str5[] = "";
+char str6[] = "\n";
+ck_assert_int_eq(s21_memcmp(str11, str22, n), 0);
+ck_assert_int_eq(s21_memcmp(str11, str33, n), 1);
+ck_assert_int_eq(s21_memcmp(str1, str2, 6), 0);
+ck_assert_int_eq(s21_memcmp(str1, str3, 9), -117);
+ck_assert_int_eq(s21_memcmp(str1, str3, 5), 0);
+ck_assert_int_eq(s21_memcmp(str1, str4, 1), 0);
+ck_assert_int_eq(s21_memcmp(str1, str5, 1), 113);
+ck_assert_int_eq(s21_memcmp(str5, str6, 1), -10);
+#endif
+
+#test test_s21_memset
+char str1[100] = "Hello world!";
+char str2[100] = "Hello world!";
+char c = 'H';
+s21_size_t n = 5;
+ck_assert_str_eq(s21_memset(str1, c, n), memset(str2, c, n));
+
+char mass0[] = "RandomText";
+char mass1[] = "123456";
+char mass2[] = "AEZAKMI";
+char mass3[] = "wasd";
+char mass4[] =
+    "Copies the character c (unsigned type) to the first n characters of the "
+    "string specified by the str argument.";
+char mass5[] =
+    "´®©ß´´ßƒ˙®ß¬ß´π˚ˆ∆ˆå∆∑π˚å∑…≤ç¬ç≤åæπ¬ ∑π¬∂“π¬∑∂åπ“¬“πå†® "
+    "®µ˚®ß´ƒππß´ƒ å∑∂µå∂≈≤≥≥µ≤µç√µπå∑œ∑´©®†≤≥÷≈";
+
+ck_assert_str_eq(s21_memset(mass0, '0', 4), memset(mass0, '0', 4));
+ck_assert_str_eq(s21_memset(mass1, 'Z', 4), memset(mass1, 'Z', 4));
+ck_assert_str_eq(s21_memset(mass2, '6', 6), memset(mass2, '6', 6));
+ck_assert_str_eq(s21_memset(mass3, 'Q', 1), memset(mass3, 'Q', 1));
+ck_assert_str_eq(s21_memset(mass4, 'F', 6), memset(mass4, 'F', 6));
+ck_assert_pstr_eq(s21_memset(mass5, 'z', 6), memset(mass5, 'z', 6));
+
+#test test_s21_strchr
+char str[100] = "Hello world!";
+char c = 'H';
+ck_assert_str_eq(s21_strchr(str, c), strchr(str, c));
+char array1[32] = "Hello my friend!";
+char array2[32] = "What you want?";
+char array3[128] = "https://rocketchat-student.21-school.ru/";
+
+ck_assert_pstr_eq(s21_strchr(array1, '!'), strchr(array1, '!'));
+ck_assert_pstr_eq(s21_strchr(array1, ' '), strchr(array1, ' '));
+ck_assert_pstr_eq(s21_strchr(array2, '?'), strchr(array2, '?'));
+ck_assert_pstr_eq(s21_strchr(array2, 32), strchr(array2, 32));
+ck_assert_pstr_eq(s21_strchr(array2, 31), strchr(array2, 31));
+ck_assert_pstr_eq(s21_strchr(array3, '/'), strchr(array3, '/'));
+ck_assert_pstr_eq(s21_strchr(array3, '}'), strchr(array3, '}'));
+ck_assert_pstr_eq(s21_strchr(array3, 'a'), strchr(array3, 'a'));
+
+#test test_s21_strcspn
+char str11[100] = "Hello world!";
+char str22[100] = "Bye world!";
+char str33[100] = "Hello world!";
+char str44[100] = "Hello world!";
+ck_assert_int_eq(s21_strcspn(str11, str22), strcspn(str11, str22));
+ck_assert_int_eq(s21_strcspn(str33, str44), strcspn(str33, str44));
+
+char str1[] = "qwerty";
+char str2[] = "123456789";
+char str3[] = "";
+char str4[] = "987";
+char str5[] = "rgdsherpokwp oekopwpoq";
+char str6[] = "END";
+char str7[] = "THE_END";
+char str8[] = "_";
+char str9[] = " ";
+
+ck_assert_int_eq(s21_strcspn(str1, str3), strcspn(str1, str3));
+ck_assert_int_eq(s21_strcspn(str2, str4), strcspn(str2, str4));
+ck_assert_int_eq(s21_strcspn(str5, str1), strcspn(str5, str1));
+ck_assert_int_eq(s21_strcspn(str5, str3), strcspn(str5, str3));
+ck_assert_int_eq(s21_strcspn(str5, str9), strcspn(str5, str9));
+ck_assert_int_eq(s21_strcspn(str7, str6), strcspn(str7, str6));
+ck_assert_int_eq(s21_strcspn(str7, str8), strcspn(str7, str8));
+ck_assert_int_eq(s21_strcspn(str7, str9), strcspn(str7, str9));
+ck_assert_int_eq(s21_strcspn(str9, "\n"), strcspn(str9, "\n"));
+ck_assert_int_eq(s21_strcspn(str9, "\0"), strcspn(str9, "\0"));
+
+#test test_s21_strncat
+char dest21[100] = "Hello world!";
+char src21[100] = "Goodbye world!";
+char dest[100] = "Hello world!";
+char src[100] = "Goodbye world!";
+s21_size_t n = 20;
+ck_assert_str_eq(s21_strncat(dest21, src21, n), strncat(dest, src, n));
+
+char my_str1[100] = "Hello my friend!";
+char orig_str1[100] = "Hello my friend!";
+
+char my_str2[100] = "What you want?";
+char orig_str2[100] = "What you want?";
+
+char my_str3[100] = "1q_2w_3e_4r_5y";
+char orig_str3[100] = "1q_2w_3e_4r_5y";
+
+char my_str4[10] = "12345";
+char orig_str4[10] = "12345";
+
+char my_str5[100] = "∑çåœ®ç¬å≠œ≤ç√";
+char orig_str5[100] = "∑çåœ®ç¬å≠œ≤ç√";
+
+char my_str6[3] = "\n";
+char orig_str6[3] = "\n";
+
+char my_str7[3] = "\0";
+char orig_str7[3] = "\0";
+
+char my_str8[100] = "https://edu.21-school.ru/";
+char orig_str8[100] = "https://edu.21-school.ru/";
+
+char my_str9[100] = "Dream Team";
+char orig_str9[100] = "Dream Team";
+
+char my_str10[10] = "";
+char orig_str10[10] = "";
+
+ck_assert_str_eq(s21_strncat(my_str1, "qwrteturyit", 12),
+                 strncat(orig_str1, "qwrteturyit", 12));
+ck_assert_str_eq(s21_strncat(my_str8, "q w e r t y", 12),
+                 strncat(orig_str8, "q w e r t y", 12));
+ck_assert_str_eq(s21_strncat(my_str10, my_str7, 5),
+                 strncat(orig_str10, orig_str7, 5));
+ck_assert_str_eq(s21_strncat(my_str2, my_str6, 5),
+                 strncat(orig_str2, orig_str6, 5));
+ck_assert_str_eq(s21_strncat(my_str9, "ANDGIGAMEGATEST", 20),
+                 strncat(orig_str9, "ANDGIGAMEGATEST", 20));
+ck_assert_str_eq(s21_strncat(my_str3, my_str4, 10),
+                 strncat(orig_str3, orig_str4, 10));
+ck_assert_str_eq(s21_strncat(my_str3, "not 1q_2w_3e_4r_5y - qwerty", 28),
+                 strncat(orig_str3, "not 1q_2w_3e_4r_5y - qwerty", 28));
+ck_assert_str_eq(s21_strncat(my_str5, "strncat", 3),
+                 strncat(orig_str5, "strncat", 3));
+
+#test test_s21_strncmp
+char str1[100] = "Hello world!";
+char str2[100] = "Hello world!";
+char str3[100] = "Goodbye world!";
+s21_size_t n = 7;
+s21_size_t n1 = 5;
+s21_size_t n2 = 0;
+ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+ck_assert_int_eq(s21_strncmp(str1, str3, n1), strncmp(str1, str3, n1));
+ck_assert_int_eq(s21_strncmp(str1, str3, n2), strncmp(str1, str3, n2));
+
+char str[] = "Compares at most the first n bytes of str1 and str2.";
+char exam1[] = "str1";
+char exam2[] = "str2";
+char exam3[] = " ";
+char exam4[] = "\n";
+char exam5[] = "\0";
+char exam6[] = ".";
+char exam7[] = "C";
+int m = -53;
+
+ck_assert_int_eq(s21_strncmp(str, exam1, 0), strncmp(str, exam1, 0));
+ck_assert_int_eq(s21_strncmp(str, exam1, 53), strncmp(str, exam1, 53));
+ck_assert_int_eq(s21_strncmp(str, exam2, 12), strncmp(str, exam2, 12));
+ck_assert_int_eq(s21_strncmp(str, exam3, 34), strncmp(str, exam3, 34));
+ck_assert_int_eq(s21_strncmp(str, exam4, m), strncmp(str, exam4, m));
+ck_assert_int_eq(s21_strncmp(str, exam5, 55), strncmp(str, exam5, 55));
+ck_assert_int_eq(s21_strncmp(str, exam6, 1), strncmp(str, exam6, 1));
+ck_assert_int_eq(s21_strncmp(str, exam7, 4), strncmp(str, exam7, 4));
+ck_assert_int_eq(s21_strncmp(exam3, exam4, 3), strncmp(exam3, exam4, 3));
+ck_assert_int_eq(s21_strncmp(exam3, exam5, 5), strncmp(exam3, exam5, 5));
+
+#test test_s21_strncpy
+char dest[100] = "Hello world!";
+char src[100] = "Goodbye world!";
+s21_size_t n = 20;
+ck_assert_str_eq(s21_strncpy(dest, src, n), strncpy(dest, src, n));
+
+char empty_array1[20] = "";
+char empty_array2[20] = "";
+char empty_array3[20] = "";
+char empty_array4[20] = "";
+char *str1 = "qwerty";
+
+ck_assert_str_eq(s21_strncpy(empty_array1, str1, 6),
+                 strncpy(empty_array2, str1, 6));
+ck_assert_str_eq(s21_strncpy(empty_array3, "But now not empty", 18),
+                 strncpy(empty_array4, "But now not empty", 18));
+
+char my_str1[] = "first str";
+char orig_str1[] = "first str";
+int n1 = 2;
+
+ck_assert_str_eq(s21_strncpy(my_str1, str1, n1), strncpy(orig_str1, str1, n1));
+
+char my_str2[20] = "first str or not?";
+char orig_str2[20] = "first str or not?";
+int n2 = 5;
+
+ck_assert_str_eq(s21_strncpy(my_str2, "Really?", n2),
+                 strncpy(orig_str2, "Really?", n2));
+
+#test test_s21_strpbrk
+char str1[100] = "Hello world!";
+char str2[100] = "Hello world!";
+char str3[100] = "HHHHHHHHHHH!";
+char str4[100] = "DDDDDDDDDDD!";
+ck_assert_str_eq(s21_strpbrk(str1, str2), strpbrk(str1, str2));
+ck_assert_str_eq(s21_strpbrk(str3, str4), strpbrk(str3, str4));
+
+char test1[] = "test1";
+char test2[] =
+    "Finds the first character in str1 that matches any character in str2.";
+char test3[] = "\n";
+char test4[] = "\0";
+char test5[] = "1234567890";
+char test6[] = "88005553535";
+
+ck_assert_ptr_eq(s21_strpbrk(test1, test2), strpbrk(test1, test2));
+ck_assert_ptr_eq(s21_strpbrk(test1, test5), strpbrk(test1, test5));
+ck_assert_ptr_eq(s21_strpbrk(test1, test6), strpbrk(test1, test6));
+ck_assert_ptr_eq(s21_strpbrk(test2, test1), strpbrk(test2, test1));
+ck_assert_ptr_eq(s21_strpbrk(test2, test5), strpbrk(test2, test5));
+ck_assert_ptr_eq(s21_strpbrk(test2, test6), strpbrk(test2, test6));
+ck_assert_ptr_eq(s21_strpbrk(test5, test3), strpbrk(test2, test3));
+ck_assert_ptr_eq(s21_strpbrk(test6, test4), strpbrk(test6, test4));
+ck_assert_ptr_eq(s21_strpbrk(test6, ""), strpbrk(test6, ""));
+ck_assert_ptr_eq(s21_strpbrk("", test2), strpbrk("", test2));
+ck_assert_ptr_null(s21_strpbrk("", test2));
+ck_assert_ptr_null(s21_strpbrk(test6, ""));
+ck_assert_ptr_eq(s21_strpbrk(test2, "S"), strpbrk(test2, "S"));
+ck_assert_ptr_eq(s21_strpbrk(test2, "s"), strpbrk(test2, "s"));
+
+#test test_s21_strrchr
+char str1[100] = "Hello world!";
+char c1 = 'H';
+char c2 = 'w';
+char c3 = 'K';
+char c4 = '\0';
+ck_assert_str_eq(s21_strrchr(str1, c1), strrchr(str1, c1));
+ck_assert_str_eq(s21_strrchr(str1, c2), strrchr(str1, c2));
+ck_assert_pstr_eq(s21_strrchr(str1, c3), strrchr(str1, c3));
+ck_assert_pstr_eq(s21_strrchr(str1, c4), strrchr(str1, c4));
+
+char test1[] =
+    "Searches for the last occurrence of the character c (unsigned type) in "
+    "the string pointed to by str.";
+char test2[] = "1234567890";
+char test3[] = "88005553535";
+char test4[] = "edu.21-school.ru";
+
+ck_assert_pstr_eq(s21_strrchr(test1, 'a'), strrchr(test1, 'a'));
+ck_assert_pstr_eq(s21_strrchr(test1, 32), strrchr(test1, 32));
+ck_assert_pstr_eq(s21_strrchr(test1, '.'), strrchr(test1, '.'));
+ck_assert_pstr_eq(s21_strrchr(test1, '\n'), strrchr(test1, '\n'));
+ck_assert_pstr_eq(s21_strrchr(test2, '\0'), strrchr(test2, '\0'));
+ck_assert_pstr_eq(s21_strrchr(test2, '0'), strrchr(test2, '0'));
+ck_assert_pstr_eq(s21_strrchr(test3, '3'), strrchr(test3, '3'));
+ck_assert_pstr_eq(s21_strrchr(test4, '.'), strrchr(test4, '.'));
+ck_assert_pstr_eq(s21_strrchr(test4, '3'), strrchr(test4, '3'));
+
+#test test_s21_strstr
+char str1[100] = "Hello world!";
+char str2[100] = "Hello";
+char str3[100] = "Bye";
+ck_assert_str_eq(s21_strstr(str1, str2), strstr(str1, str2));
+ck_assert_pstr_eq(s21_strstr(str1, str3), strstr(str1, str3));
+
+char text1[] =
+    "Finds the first occurrence of the entire string needle (not including "
+    "the terminating null character) that appears in the string haystack.";
+char text2[] = "This is my text";
+char text3[] = "Peer 2 peer / beer 2 beer";
+
+char scan1[] = " ";
+char scan2[] = "2";
+char scan3[] = "in";
+char scan4[] = "is";
+char scan5[] = "a";
+char scan6[] = "21";
+char scan7[] = "\0";
+char scan8[] = "\n";
+
+ck_assert_pstr_eq(s21_strstr(text1, scan1), strstr(text1, scan1));
+ck_assert_pstr_eq(s21_strstr(text1, scan2), strstr(text1, scan2));
+ck_assert_pstr_eq(s21_strstr(text1, scan3), strstr(text1, scan3));
+ck_assert_pstr_eq(s21_strstr(text1, scan3), strstr(text1, scan3));
+ck_assert_pstr_eq(s21_strstr(text1, scan5), strstr(text1, scan5));
+ck_assert_pstr_eq(s21_strstr(text2, scan1), strstr(text2, scan1));
+ck_assert_pstr_eq(s21_strstr(text2, scan4), strstr(text2, scan4));
+ck_assert_pstr_eq(s21_strstr(text2, scan7), strstr(text2, scan7));
+ck_assert_pstr_eq(s21_strstr(text2, scan8), strstr(text2, scan8));
+ck_assert_pstr_eq(s21_strstr(text3, scan2), strstr(text3, scan2));
+ck_assert_pstr_eq(s21_strstr(text3, scan6), strstr(text3, scan6));
+ck_assert_pstr_eq(s21_strstr(text1, "first"), strstr(text1, "first"));
+ck_assert_pstr_eq(s21_strstr("School21", scan6), strstr("School21", scan6));
+
+#test test_s21_strtok
+char str[100] = "Hello world!!How are you world?Im fine too world)Bye world";
+char delim[100] = "!?)";
+char *istr1;
+char *istr2;
+ck_assert_str_eq(s21_strtok(str, delim), strtok(str, delim));
+istr1 = s21_strtok(str, delim);
+istr2 = strtok(str, delim);
+while (istr1 != 0) {
+  ck_assert_str_eq(istr1, istr2);
+  istr1 = s21_strtok(NULL, delim);
+  istr2 = strtok(NULL, delim);
+}
+
+char array_1[100] = "My name is Root. Hello world!";
+char *parr1 = array_1;
+char array_2[100] = "My name is Root. Hello world!";
+char *parr2 = array_2;
+char array_3[100] = "\0";
+char *parr3 = array_3;
+char array_4[100] = "\0";
+char *parr4 = array_4;
+
+s21_strtok(parr1, " .");
+strtok(parr2, " .");
+ck_assert_pstr_eq(parr1, parr2);
+
+parr1 = s21_strtok(S21_NULL, " .");
+parr2 = strtok(S21_NULL, " .");
+ck_assert_pstr_eq(parr1, parr2);
+
+parr1 = s21_strtok(parr1, "o");
+parr2 = strtok(parr2, "o");
+ck_assert_pstr_eq(parr1, parr2);
+
+parr1 = s21_strtok(parr1, "x");
+parr2 = strtok(parr2, "x");
+ck_assert_pstr_eq(parr1, parr2);
+
+parr3 = s21_strtok(parr3, "\0");
+parr4 = strtok(parr4, "\0");
+ck_assert_pstr_eq(parr3, parr4);
+
+char *test1 = " ";
+char *test2 = "";
+char *test3 = "o";
+char *test4 = "M";
+char *test5 = "ƒ";
+
+ck_assert_pstr_eq(s21_strtok(parr1, test1), strtok(parr1, test1));
+ck_assert_pstr_eq(s21_strtok(parr1, test2), strtok(parr1, test2));
+ck_assert_pstr_eq(s21_strtok(parr1, test3), strtok(parr1, test3));
+ck_assert_pstr_eq(s21_strtok(parr1, test4), strtok(parr1, test4));
+ck_assert_pstr_eq(s21_strtok(parr1, test5), strtok(parr1, test5));
+
+#test test_s21_insert
+char src[100] = "Hello world!";
+char str[100] = "Goodbye world!";
+char test_str[100] = "HelloGoodbye world! world!";
+s21_size_t start_index = 5;
+char *blabla = s21_insert(src, str, start_index);
+ck_assert_str_eq(blabla, test_str);
+free(blabla);
+
+char *result = S21_NULL;
+
+char text1[] = "he boy";
+char dop_text1[] = " or bububob";
+result = s21_insert(text1, dop_text1, 6);
+ck_assert_str_eq(result, "he boy or bububob");
+free(result);
+
+char text2[] = "HE-HE BOOOOY";
+char dop_text2[] = "-HE";
+result = s21_insert(text2, dop_text2, 2);
+ck_assert_str_eq(result, "HE-HE-HE BOOOOY");
+free(result);
+
+char text3[] = "not HE-HE";
+char dop_text3[] = "HE-";
+result = s21_insert(text3, dop_text3, 4);
+ck_assert_str_eq(result, "not HE-HE-HE");
+free(result);
+
+char text4[] = "";
+char dop_text4[] = " ";
+result = s21_insert(text4, dop_text4, 0);
+ck_assert_str_eq(result, " ");
+free(result);
+
+char text5[] = "Network";
+char dop_text5[] = "\n";
+result = s21_insert(text5, dop_text5, 4);
+ck_assert_str_eq(result, "Netw\nork");
+free(result);
+
+char text6[] = "not Finish";
+char dop_text6[] = "Start ";
+result = s21_insert(text6, dop_text6, 0);
+ck_assert_str_eq(result, "Start not Finish");
+free(result);
+
+char *text7 = S21_NULL;
+char dop_text7[] = "Start ";
+result = s21_insert(text7, dop_text7, 20);
+ck_assert_ptr_null(result);
+free(result);
+
+char text8[] = "not Finish";
+char dop_text8[] = "Start ";
+result = s21_insert(text8, dop_text8, 20);
+ck_assert_ptr_null(result);
+free(result);
+
+#test test_s21_to_lower
+char text1[] = "he boy";
+char text2[] = "HE-HE BOOOOY";
+char text3[] = "not HE-HE";
+char text4[] = "123qwertY";
+char text5[] = "Why not X?";
+
+char *test_result1 = s21_to_lower(text1);
+char *test_result2 = s21_to_lower(text2);
+char *test_result3 = s21_to_lower(text3);
+char *test_result4 = s21_to_lower(text4);
+char *test_result5 = s21_to_lower(text5);
+
+ck_assert_str_eq(test_result1, "he boy");
+free(test_result1);
+ck_assert_str_eq(test_result2, "he-he booooy");
+free(test_result2);
+ck_assert_str_eq(test_result3, "not he-he");
+free(test_result3);
+ck_assert_str_eq(test_result4, "123qwerty");
+free(test_result4);
+ck_assert_str_eq(test_result5, "why not x?");
+free(test_result5);
+
+char *result = S21_NULL;
+
+result = s21_to_lower("©∑œ´®∑ßƒç");
+ck_assert_str_eq(result, "©∑œ´®∑ßƒç");
+free(result);
+
+result = s21_to_lower("qWErty");
+ck_assert_str_eq(result, "qwerty");
+free(result);
+
+result = s21_to_lower(" ");
+ck_assert_str_eq(result, " ");
+free(result);
+
+#test test_s21_to_upper
+char text1[] = "he boy";
+char text2[] = "HE-HE BOOOOY";
+char text3[] = "not HE-HE";
+char text4[] = "123qwertY";
+char text5[] = "Why not X?";
+
+char *test_result1 = s21_to_upper(text1);
+char *test_result2 = s21_to_upper(text2);
+char *test_result3 = s21_to_upper(text3);
+char *test_result4 = s21_to_upper(text4);
+char *test_result5 = s21_to_upper(text5);
+
+ck_assert_str_eq(test_result1, "HE BOY");
+free(test_result1);
+ck_assert_str_eq(test_result2, "HE-HE BOOOOY");
+free(test_result2);
+ck_assert_str_eq(test_result3, "NOT HE-HE");
+free(test_result3);
+ck_assert_str_eq(test_result4, "123QWERTY");
+free(test_result4);
+ck_assert_str_eq(test_result5, "WHY NOT X?");
+free(test_result5);
+
+char *result = s21_to_upper("©∑œ´®∑ßƒç");
+ck_assert_str_eq(result, "©∑œ´®∑ßƒç");
+free(result);
+
+result = s21_to_upper("qwerty");
+ck_assert_str_eq(result, "QWERTY");
+free(result);
+
+result = s21_to_upper(" ");
+ck_assert_str_eq(result, " ");
+free(result);
+
+#test test_s21_trim
+char *result = S21_NULL;
+result = s21_trim("12345qwerty12345", "12345");
+ck_assert_str_eq(result, "qwerty");
+free(result);
+result = s21_trim("my test good!", "!");
+ck_assert_str_eq(result, "my test good");
+free(result);
+result = s21_trim(" ", " ");
+ck_assert_str_eq(result, "");
+free(result);
+
+char *test1 = "S21";
+char *test2 = "kidneyha";
+char *test3 = "ha-ha-ha";
+char *test4 = "-0-0-";
+char *test5 = "";
+char *test6 = S21_NULL;
+
+char *test_result1 = s21_trim(test1, test5);
+char *test_result2 = s21_trim(test1, test6);
+char *test_result3 = s21_trim(test2, test3);
+char *test_result4 = s21_trim(test3, test2);
+char *test_result5 = s21_trim(test3, test4);
+
+ck_assert_str_eq(test_result1, "S21");
+ck_assert_str_eq(test_result2, "S21");
+ck_assert_str_eq(test_result3, "kidney");
+ck_assert_str_eq(test_result4, "-ha-");
+ck_assert_str_eq(test_result5, "ha-ha-ha");
+
+free(test_result1);
+free(test_result2);
+free(test_result3);
+free(test_result4);
+free(test_result5);
+
+// ##########################
+// ##########################
+//  GETTING STARTED WITH S21_SPRINTF
+// ##########################
+// ##########################
+
+#test test_s21_sprintf
+long int num1 = 123456789;
+int num2 = -42, num3 = 0;
+short int num4 = -42;
+unsigned int u_num1 = 12342314;
+unsigned long int u_num2 = 12342314123123;
+unsigned short int u_num3 = 21546;
+double d1 = 3.14159, d2 = -123.321, d3 = 9999.9998212, d4 = 0;
+char c1 = 'A', c2 = 48;
+char str1[100] = "Hello", str2[100] = "", str3[100] = "%q%d";
+int original_len = 0, s21_len = 0;
+char str[100];
+char s21_str[100];
+char format[100] = "Hello world%d***\n";
+
+// ##########################
+//  GETTING STARTED WITH INTEGER
+// ##########################
+
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-7.6d***\n");
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%hd***\n");
+short int num_x1 = 12;
+original_len = sprintf(str, format, num_x1);
+s21_len = s21_sprintf(s21_str, format, num_x1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%ld***\n");
+long int num_x2 = 122;
+original_len = sprintf(str, format, num_x2);
+s21_len = s21_sprintf(s21_str, format, num_x2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.0d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.2d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.13d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%0.13d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%2.13d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%15.11d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% -d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%- d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+-d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-+d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% 8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% -8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%- d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-+8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+-8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% 08d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%0 8d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%0+d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+0d***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+0d %%***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num2);
+s21_len = s21_sprintf(s21_str, format, num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+// ##########################
+//  GETTING STARTED WITH DOUBLE
+// ##########################
+
+strcpy(format, "Hello world%f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.0f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.2f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%.13f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%0.13f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%2.13f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%15.11f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% -f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%- f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+-f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-+f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% 8f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% -8f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%- f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%8f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-8f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%-+8f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+-8f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world% 08f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%0 8f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%0+f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+0f***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%+0f %%***\n");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d2);
+s21_len = s21_sprintf(s21_str, format, d2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d3);
+s21_len = s21_sprintf(s21_str, format, d3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+// ##########################
+//  GETTING STARTED WITH UNSIGNED
+// ##########################
+
+strcpy(format, "Hello world%hu***\n");
+unsigned short int u_num_x1 = 123;
+original_len = sprintf(str, format, u_num_x1);
+s21_len = s21_sprintf(s21_str, format, u_num_x1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%u***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, u_num1);
+s21_len = s21_sprintf(s21_str, format, u_num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, u_num2);
+s21_len = s21_sprintf(s21_str, format, u_num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, u_num3);
+s21_len = s21_sprintf(s21_str, format, u_num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+strcpy(format, "Hello world%lu***\n");
+original_len = sprintf(str, format, num1);
+s21_len = s21_sprintf(s21_str, format, num1);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, u_num2);
+s21_len = s21_sprintf(s21_str, format, u_num2);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, u_num3);
+s21_len = s21_sprintf(s21_str, format, u_num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, num4);
+s21_len = s21_sprintf(s21_str, format, num4);
+ck_assert_int_eq(original_len, s21_len);
+ck_assert_str_eq(str, s21_str);
+
+// ##########################
+//  GETTING STARTED WITH OTHED EDGE CASES
+// ##########################
+
+// check * for width and precision
+strcpy(format, "%-+*.*f");
+original_len = sprintf(str, format, 10, 10, d1);
+s21_len = s21_sprintf(s21_str, format, 10, 10, d1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(str, s21_str);
+original_len = sprintf(str, format, 0, 0, d4);
+s21_len = s21_sprintf(s21_str, format, 0, 0, d4);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(str, s21_str);
+strcpy(format, "%.*f%c%+.2d");
+original_len = sprintf(str, format, 3, d1, 'e', 10);
+s21_len = s21_sprintf(s21_str, format, 3, d1, 'e', 10);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(str, s21_str);
+
+// check edge value for 0 with 0 precision
+strcpy(format, "%-+10.d");
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(str, s21_str);
+strcpy(format, "%-+10.0d");
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(str, s21_str);
+strcpy(format, "%-+10.d");
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(str, s21_str);
+strcpy(format, "%-+10.0d");
+original_len = sprintf(str, format, num3);
+s21_len = s21_sprintf(s21_str, format, num3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(str, s21_str);
+
+// check flags - and # for specifier f
+strcpy(format, "%-#12.f");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+// check flag # for specifier f
+strcpy(format, "%#12.f");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+// check flag # and 0 for specifier f
+strcpy(format, "%0#12.f");
+original_len = sprintf(str, format, d1);
+s21_len = s21_sprintf(s21_str, format, d1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, d4);
+s21_len = s21_sprintf(s21_str, format, d4);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+// ##########################
+//  GETTING STARTED WITH STRINGS
+// ##########################
+
+strcpy(format, "Hello world%7s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%-7s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%2.4s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%15.3s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%-15.3s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%15.100s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%1.50s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%20.s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%-20.s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%-15.100s***\n");
+original_len = sprintf(str, format, str1);
+s21_len = s21_sprintf(s21_str, format, str1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str2);
+s21_len = s21_sprintf(s21_str, format, str2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, str3);
+s21_len = s21_sprintf(s21_str, format, str3);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+// ##########################
+//  GETTING STARTED WITH CHARS
+// ##########################
+
+strcpy(format, "Hello world%c***\n");
+original_len = sprintf(str, format, c1);
+s21_len = s21_sprintf(s21_str, format, c1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, c2);
+s21_len = s21_sprintf(s21_str, format, c2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%12c***\n");
+original_len = sprintf(str, format, c1);
+s21_len = s21_sprintf(s21_str, format, c1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, c2);
+s21_len = s21_sprintf(s21_str, format, c2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+strcpy(format, "Hello world%-12c***\n");
+original_len = sprintf(str, format, c1);
+s21_len = s21_sprintf(s21_str, format, c1);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+original_len = sprintf(str, format, c2);
+s21_len = s21_sprintf(s21_str, format, c2);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(s21_str, str);
+
+#test test_s21_strerror
+for (int i = -10; i < 150; i++) {
+  ck_assert_str_eq(strerror(i), s21_strerror(i));
+}
+
+#test test_s21_sscanf
+char *buffer = "R";
+char orig[100];
+char s21[100];
+int original_len = sscanf(buffer, "%c", orig);
+int s21_len = s21_sscanf(buffer, "%c", s21);
+ck_assert_int_eq(s21_len, original_len);
+ck_assert_str_eq(orig, s21);
